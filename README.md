@@ -8,9 +8,13 @@ manual reverse engineering can be a slow and painful process. `jnitrace` works
 as a dynamic analysis tracing tool similar to frida-trace or strace but for
 the JNI.
 
+原理：jnitrace的原理是通过hook各个lib的Java_xxx或者JNI_OnLoad方法，然后使用自己的JNIEnv结构体去替换参数中的JNIEnv结构体来实现JNI方法的Hook
 # Fork Patch
-1.将jnitrace-engine本地集成，方便修改
-2.支持纯JS的使用方式，因为Frida Python用着还是不太方便
+1. 将jnitrace-engine本地集成，方便修改
+2. 支持纯JS的使用方式，因为Frida Python用着还是不太方便
+    - 修改jnitrace-engine之后npm install
+    - npm run build
+    - frida -U -f xx -l ./build/jnitrace.js --no-pause
 
 ![JNITrace Output](https://i.ibb.co/ZJ04cBB/jnitrace-1.png)
 

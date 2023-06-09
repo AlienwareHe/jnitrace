@@ -579,7 +579,6 @@ class DataTransport {
 
         const name = data.getArgAsPtr(NAME_INDEX).readCString();
         const sig = data.getArgAsPtr(SIG_INDEX).readCString();
-        console.log('get name:',name,sig);
         outputArgs.push(new DataJSONContainer(data.args[CLASS_INDEX], null));
         outputArgs.push(new DataJSONContainer(data.args[NAME_INDEX], name));
         outputArgs.push(new DataJSONContainer(data.args[SIG_INDEX], sig));
