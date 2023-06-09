@@ -1,0 +1,3 @@
+[submodule "libs/jnitrace-engine"]
+	path = libs/jnitrace-engine
+	url = git@github.com:AlienwareHe/jnitrace-engine.git

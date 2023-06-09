@@ -6,12 +6,12 @@
   "main": "jnitrace/src/main.js",
   "scripts": {
     "prepare": "npm run build",
-    "build": "frida-compile jnitrace/src/main.ts -o jnitrace/build/jnitrace.js -c",
-    "watch": "frida-compile jnitrace/src/main.ts -o jnitrace/build/jnitrace.js -cw",
+    "build": "frida-compile jnitrace/src/standalone.ts -o jnitrace/build/jnitrace.js -c",
+    "watch": "frida-compile jnitrace/src/standalone.ts -o jnitrace/build/jnitrace.js -cw",
     "lint": "eslint jnitrace/src/**/*.ts"
   },
   "dependencies": {
-    "jnitrace-engine": "^1.1.1"
+    "jnitrace-engine": "file:./libs/jnitrace-engine"
   },
   "devDependencies": {
     "@types/frida-gum": "^16.2.0",

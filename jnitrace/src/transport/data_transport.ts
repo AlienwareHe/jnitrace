@@ -201,6 +201,50 @@ class DataTransport {
         );
     }
 
+    public formatJNIEnvCallInfo (
+        data: MethodData,
+        context: NativePointer[] | undefined
+    ): RecordJSONContainer {
+        const RET_INDEX = 0;
+        const outputArgs: DataJSONContainer[] = [];
+        const outputRet: DataJSONContainer[] = [];
+        const jniEnv = data.getArgAsPtr(JNI_ENV_INDEX);
+
+        this.updateState(data);
+
+        outputArgs.push(new DataJSONContainer(jniEnv, null));
+
+        let sendData = null;
+        const argData = this.addJNIEnvArgs(data, outputArgs);
+        const retData = this.addJNIEnvRet(data, outputRet);
+
+        if (argData !== null && retData === null) {
+            sendData = argData;
+        } else if (argData == null && retData !== null) {
+            sendData = retData;
+        }
+
+        this.enrichTraceData(data, outputArgs, outputRet);
+
+        let backtrace = undefined;
+        const jParams = data.jParams;
+        if (context !== undefined) {
+            backtrace = this.createBacktrace(context, "fuzzy");
+        }
+
+        const output = new RecordJSONContainer(
+            "JNIEnv",
+            data.method,
+            outputArgs,
+            outputRet[RET_INDEX],
+            Process.getCurrentThreadId(),
+            Date.now() - this.start,
+            jParams,
+            backtrace
+        );
+        return output;
+    }
+
     public reportJNIEnvCall (
         data: MethodData,
         context: NativePointer[] | undefined
@@ -535,7 +579,7 @@ class DataTransport {
 
         const name = data.getArgAsPtr(NAME_INDEX).readCString();
         const sig = data.getArgAsPtr(SIG_INDEX).readCString();
-
+        console.log('get name:',name,sig);
         outputArgs.push(new DataJSONContainer(data.args[CLASS_INDEX], null));
         outputArgs.push(new DataJSONContainer(data.args[NAME_INDEX], name));
         outputArgs.push(new DataJSONContainer(data.args[SIG_INDEX], sig));
@@ -997,4 +1041,4 @@ class DataTransport {
     }
 }
 
-export { DataTransport };
+export { DataTransport,BacktraceJSONContainer,RecordJSONContainer };
